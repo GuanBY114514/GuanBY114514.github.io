@@ -148,28 +148,14 @@
 <h3 id="原理："><a href="#原理：" class="headerlink" title="原理："></a>原理：</h3><p><img src="\src\post\25-4-6\xt\2.png" alt=""></p>
 <p><img src="\src\post\25-4-6\xt\3.png" alt=""></p>
 <p>其本质上就是利用克劳修斯方程</p>
-<script type="math/tex; mode=display">
-\frac{\mathrm{d} P}{\mathrm{d} T} = \frac{L}{T \Delta v} \quad \text{(适用于平衡相变)}</script><p>进行计算平衡常数</p>
+<p><img src="\src\post\25-4-6\xt\gs1.png" alt=""></p>
+<p>进行计算平衡常数</p>
 <p>剩余推导过程如下</p>
-<script type="math/tex; mode=display">
-\
-\begin{aligned}
-\frac{\mathrm{d} P}{\mathrm{d} T} &= \frac{L}{T \Delta v} \\
-\mathrm{d} P &= \frac{L}{T \Delta v} \, \mathrm{d} T \\
-\int_{P_1}^{P_2} \mathrm{d} P &= \frac{L}{\Delta v} \int_{T_1}^{T_2} \frac{1}{T} \, \mathrm{d} T \\
-P_2 - P_1 &= \frac{L}{\Delta v} \left[ \ln T \right]_{T_1}^{T_2} \\
-\Delta P &= \frac{L}{\Delta v} \ln\left( \frac{T_2}{T_1} \right)
-\end{aligned}</script><p>其中，Δv为相变过程体积变化，L为相变热</p>
+<p><img src="\src\post\25-4-6\xt\gs2.png" alt=""></p>
+<p>其中，Δv为相变过程体积变化，L为相变热</p>
 <p>L的精确计算式又基尔霍夫定律可推出</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-\text{微分形式:} \quad
-\frac{\mathrm{d} (\Delta H)}{\mathrm{d} T} &= \Delta C_p, \\
-\frac{\mathrm{d} (\Delta S)}{\mathrm{d} T} &= \frac{\Delta C_p}{T}. \\
-\text{积分形式:} \quad
-\Delta H(T) &= \Delta H(T_0) + \int_{T_0}^{T} \Delta C_p \, \mathrm{d} T, \\
-\Delta S(T) &= \Delta S(T_0) + \int_{T_0}^{T} \frac{\Delta C_p}{T} \, \mathrm{d} T.
-\end{aligned}</script><h3 id="Excel实现"><a href="#Excel实现" class="headerlink" title="Excel实现"></a>Excel实现</h3><p>由于Excel本身不能计算积分式，所以我们需要把积分式展开后带入计算，这里使用了VBA（其实是Deepseek写的，我本不会VBA）</p>
+<p><img src="\src\post\25-4-6\xt\gs3.png" alt=""></p>
+<h3 id="Excel实现"><a href="#Excel实现" class="headerlink" title="Excel实现"></a>Excel实现</h3><p>由于Excel本身不能计算积分式，所以我们需要把积分式展开后带入计算，这里使用了VBA（其实是Deepseek写的，我本不会VBA）</p>
 <p><img src="\src\post\25-4-6\xt\4.png" alt=""></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Function DinttDeltaCpmdT(a As Double, b As Double, c As Double, T As Double) As Double</span><br><span class="line">    DinttDeltaCpmdT = (a * (-298.15 + T)) + (b * (-44.4467 + 0.0005 * T ^ (2))) + (c * (-8.83452 + (3.33333 * 10 ^ -7) * T ^ 3))</span><br><span class="line">End Function</span><br><span class="line"></span><br><span class="line">Function DinttDeltaCpmRatioTdT(a, b, c, T)</span><br><span class="line">    DinttDeltaCpmRatioTdT = a * (Log(T / 298.15)) + (b / 1000) * (T - 298.15) + (c / (2 * (10 ^ 6))) * (T ^ 2 - 88893.4225)</span><br><span class="line">End Function</span><br><span class="line"></span><br><span class="line">Function DeltaCpm(a As Double, b As Double, c As Double, T As Double) As Double</span><br><span class="line">    DeltaCpm = a + b * 10 ^ -3 * T + c * 10 ^ -6 * T ^ 2</span><br><span class="line">End Function</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>剩下的只需要交给Excel就可以</p>
@@ -401,6 +387,26 @@ P_2 - P_1 &= \frac{L}{\Delta v} \left[ \ln T \right]_{T_1}^{T_2} \\
 
   
   
+
+
+
+ 
+<!-- mathjax -->
+
+
+<script>
+MathJax = {
+    tex: {
+    inlineMath: 
+    [
+    
+        ['\\(','\\)'],
+    
+    ]
+    }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 
 
